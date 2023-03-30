@@ -1,4 +1,4 @@
-<?php $openJs = true; ?>
+
 <?php if(@$openJs): // jd8lab : open page js
 // ░░█ ▄▀█ █░█ ▄▀█ █▀ █▀▀ █▀█ █ █▀█ ▀█▀ ////////// ////////// ////////// ////////// ////////
 // █▄█ █▀█ ▀▄▀ █▀█ ▄█ █▄▄ █▀▄ █ █▀▀ ░█░    
@@ -9,15 +9,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php // echo $nameFileToPrint; ?></title>
+    <title><?php echo $nameFileToPrint; ?></title>
     <link rel="icon" type="image/x-icon" href="jd8_system/jd8.jpg">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/mode/javascript/javascript.min.js"></script>
+    <link rel="stylesheet" href="jd8_system/import/codemirror.min.css">
+    <script src="jd8_system/import/codemirror.min.js"></script>
+    <script src="jd8_system/import/javascript.min.js"></script>
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="jd8_system/import/highlightjs.min.css">
+    <script src="jd8_system/import/highlight.min.js"></script>
 </head>
 
 <style>
@@ -31,7 +31,8 @@ body {
     width: 75%;
     padding: 20px;
     padding-bottom: 5px;
-    margin-top: 3vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
     margin-left: auto;
     margin-right: auto;
     box-shadow: 0 4px 8px 0 rgb(255 255 255 / 2%), 0 6px 20px 0 rgb(0 0 0 / 43%);
@@ -89,7 +90,6 @@ body {
 #judul {
     font-size: 1.3rem;
     background-color: #e6f4e55c;
-    border: transparent;
     /* border-left: solid green; */
     outline: none;
 
@@ -151,6 +151,11 @@ body {
   border: 1px solid #eee;
   height: auto;
   margin-top: 10px;
+}
+
+.CodeMirror-scroll {
+    height: auto;
+    max-height:500px;
 }
 
 .hidden {
@@ -262,6 +267,10 @@ button {
   animation: fadeIn 0.5s ease-in-out;
 }
 
+code.hljs{
+    white-space: pre;
+    padding: 0;
+}
 </style>
 
 <body style="background-color:#323330">
@@ -271,7 +280,7 @@ button {
         <div class="top">
             <a href="?" class="btn-back">🔙</a>
             <a id="filename">
-                <?php // echo $nameFileToPrint; ?>
+                <?php echo $nameFileToPrint; ?>
             </a>
             <input id="title-project" type="text" placeholder="untitled project" style="background-color:#f0db4f21"><br>
             <textarea id="description-project" oninput="resize(this)" onclick="resize(this)" placeholder="description" style="background-color:#f0db4f21"></textarea><br>
@@ -280,7 +289,7 @@ button {
             <button id="run-all" onclick="runAll(this)" class="btn-run-all shadow">▶ Run All</button>
         </div>
 
-        <div id="content">
+        <div onclick="cekUnSave()" id="content">
 
             <div class="blok">
                 <button onclick="deleteBlok(this)" class="btn-delete shadow">x</button>
@@ -302,7 +311,7 @@ button {
     <button onclick="addBlok()" class="btn-add-blok shadow">+ Add</button>
 
     <div class="footer">
-        <p>jd8lab v1</p>
+        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1</a></p>
     </div>
 
     </div><!-- end container -->
@@ -312,6 +321,7 @@ button {
 
 
 <script>
+var variableTempJd8 = [];
 function moveUp(w) {
     var elem = w.parentElement;
     var prevElem = elem.previousElementSibling;
@@ -383,6 +393,7 @@ function addBlok(judul ='', komen ='', code ='', output=''){
 }
 
 function evalJs(w){
+    window.variableTempJd8 = [];
     var elem = w.parentElement;
     var output = elem.querySelector('#output');
     var code  = parseJs(getCode(elem));
@@ -398,19 +409,22 @@ function evalJs(w){
         list_isi.push(cm_list[cmTmp].getValue());
     }
 
-    var isi = list_isi.join('');
+    // console.log(list_isi);
+
+    var isi = list_isi.join("\n\n");
         isi = parseJs(isi);
-        isi = parseConsoleLog(isi);
+        isi = parseConsoleToFalse(isi);
 
     try {
-        var evil = eval(isi+code);
+        var evil = eval(isi+"\n\n"+code+"\n\n returnVariableTempJd8();");
+        // alert(isi+"\n\n"+code+"\n\n returnVariableTempJd8();");
 
         // ktk 2 console.log, hanya dieksekusi yang awal
         // var evil = new Function(`return ${isi} ${code}`)();
 
-        if(typeof evil == 'object'){
-            evil = JSON.stringify(evil);
-        }
+        // if(typeof evil == 'object'){ // sudah dihandle function lain
+        //     evil = JSON.stringify(evil);
+        // }
 
         if(code ==""){
             evil = 'output';
@@ -475,21 +489,35 @@ function parseJs(w){
     return w;
 }
 
+function parseConsoleToFalse(w){
+    // this function will store echo, var_dump, print_r to variable $temp_var
+    var w = w.replace(/console.log\(/g, 'falseReturn(');
+    var w = w.replace(/printConsole\(/g, 'falseReturn(');
+    var w = w.replace(/console.table\(/g, 'falseReturn(');
+    return w;
+}
+
 function printConsole(w){
     console.log(w);
-    return w;
+    return HandleReturn(w);
+}
+
+function HandleReturn(w){
+    if(typeof w == 'object'){
+            w = JSON.stringify(w);
+    }
+    return window.variableTempJd8.push(w);
+}
+
+function returnVariableTempJd8(){
+    var out = window.variableTempJd8.join("\n👉 ");
+    return "👉 "+out;
 }
 
 function falseReturn(){
     // return false;
 }
 
-function parseConsoleLog(w){
-    // this function will store echo, var_dump, print_r to variable $temp_var
-    var w = w.replace(/console.log\(/g, 'falseReturn(');
-    var w = w.replace(/printConsole\(/g, 'falseReturn(');
-    return w;
-}
 
 function packBlok(elem){
     var judul = elem.querySelector('#judul').value;
@@ -549,6 +577,7 @@ function save(){
             }else if(xhr.responseText == "true"){
                 const date = new Date();
                 console.log(`~ 💾 Saved : ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`);
+                window.cekLeaveSite = "";
     
                 document.getElementsByClassName("top")[0].classList.add("success");
                 setTimeout(function(){ 
@@ -577,8 +606,24 @@ function getCode(elem){
 }
 
 function renderToHtml(){
-    if(confirm("This feature is still a proposal. be careful and be wise.")){
-        const html = document.documentElement.outerHTML;
+    if(confirm("This page will reload after rendering and will DELETE any unsaved blocks. make sure to SAVE and RELOAD before pressing render. Press OK if you done.")){
+        // delete blok yang tertulis di file html (reset blok)
+        var blok = document.getElementsByClassName('blok');
+        for(var i=0;i<blok.length;i++){
+            blok[i].remove();
+        }
+
+        var html = document.documentElement.outerHTML; 
+
+
+        // change to cdn
+        html = html.replace("jd8_system/import/codemirror.min.css", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.css");
+        html = html.replace("jd8_system/import/codemirror.min.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.js");
+        html = html.replace("jd8_system/import/javascript.min.js", "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/mode/javascript/javascript.min.js");
+        html = html.replace("jd8_system/import/highlightjs.min.css", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css");
+        html = html.replace("jd8_system/import/highlight.min.js", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js");
+        html = html.replace("blok[0].remove();", "blok.remove();");
+
         const blob = new Blob([html], {type: "text/html"});
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -587,7 +632,8 @@ function renderToHtml(){
         a.click();
         URL.revokeObjectURL(url);
       
-          alert('rendered to html');
+          alert('rendered to html.');
+          location.reload();
     }
 }
 
@@ -606,6 +652,13 @@ function highlightOutputJs(){
     for(var i=0;i<js.length;i++){
         hljs.highlightElement(js[i].querySelector("code"));
     }
+}
+
+function vanillaTextarea(elem, crawl){
+    var output = elem.value;
+    var code  = parseJs(output);
+
+    return code;
 }
 
 
@@ -658,7 +711,13 @@ function login_jd8lab(callback) {
 }
 
 function print_jd8lab(w){
+    // delete blok yang tertulis di file html (reset blok)
     var blok = document.getElementsByClassName('blok');
+    if(blok.length > 0){
+        for(var i=0;i<blok.length;i++){
+            blok[i].remove();
+        }
+    }
 
     if(w){
         var parse = JSON.parse(w.pack);
@@ -666,7 +725,6 @@ function print_jd8lab(w){
         try {
             document.getElementById('title-project').value = pack[0][0];
             document.getElementById('description-project').value  = pack[0][1];
-            blok[0].remove();
         
             for(var i=0;i<pack[1].length;i++){
                 addBlok(pack[1][i][0], pack[1][i][1], pack[1][i][2], pack[1][i][3]);
@@ -677,6 +735,8 @@ function print_jd8lab(w){
         catch(err) {
             console.log(err);
         }
+    }else{
+        addBlok("", "", "console.log(document);");
     }
 
 
@@ -685,12 +745,22 @@ function print_jd8lab(w){
 
 }
 
+function cekUnSave(){
+	window.cekLeaveSite = "unsave";
+}
+
+window.addEventListener('beforeunload', function (e) {
+    if (cekLeaveSite == "unsave") {
+        e.preventDefault();
+        e.returnValue = 'mau ke mana?';
+    }
+});
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('welcome to jd8lab v1');
     // note, resize all textarea
     initAllCode();
-    <?php // echo "print_jd8lab($openFile);";?>
+    <?php echo "print_jd8lab($openFile);";?>
 });
 </script>
 

@@ -294,7 +294,7 @@ code.hljs{
             <button id="run-all" onclick="runAll(this)" class="btn-run-all shadow">▶ Run All</button>
         </div>
 
-        <div id="content">
+        <div onclick="cekUnSave()" id="content">
 
             <div class="blok">
                 <button onclick="deleteBlok(this)" class="btn-delete shadow">x</button>
@@ -316,7 +316,7 @@ code.hljs{
     <button onclick="addBlok()" class="btn-add-blok shadow">+ Add</button>
 
     <div class="footer">
-        <p>jd8lab v1</p>
+        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1</a></p>
     </div>
 
     </div><!-- end container -->
@@ -496,6 +496,7 @@ function save(){
             }else if(xhr.responseText == "true"){
                 const date = new Date();
                 console.log(`~ 💾 Saved : ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`);
+                window.cekLeaveSite = "";
     
                 document.getElementsByClassName("top")[0].classList.add("success");
                 setTimeout(function(){ 
@@ -638,6 +639,9 @@ function hideNullHeadingComment(){
         if(heading == '' && comment == ''){
             btnShowHide.click();
         }
+
+        // numpang, untuk resize
+        blok[i].querySelector("#komen").click();
     }
 }
 
@@ -696,6 +700,7 @@ function print_jd8lab(w){
         try {
             document.getElementById('title-project').value = pack[0][0];
             document.getElementById('description-project').value  = pack[0][1];
+            document.getElementById('description-project').click();
         
             for(var i=0;i<pack[1].length;i++){
                 addBlok(pack[1][i][0], pack[1][i][1], pack[1][i][2], pack[1][i][3]);
@@ -715,6 +720,17 @@ function print_jd8lab(w){
     // console.log(w);
 
 }
+
+function cekUnSave(){
+	window.cekLeaveSite = "unsave";
+}
+
+window.addEventListener('beforeunload', function (e) {
+    if (cekLeaveSite == "unsave") {
+        e.preventDefault();
+        e.returnValue = 'mau ke mana?';
+    }
+});
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('welcome to jd8lab v1');

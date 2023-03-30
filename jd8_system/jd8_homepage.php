@@ -211,7 +211,7 @@ h2{
         </div><!-- end content -->
 
     <div class="footer">
-        <p>jd8lab v1</p>
+        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1</a></p>
     </div>
 
     </div><!-- end container -->

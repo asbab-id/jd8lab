@@ -27,7 +27,7 @@ body {
 
 
 .container {
-    background-color: white;
+    background-color: #f5f7f9;
     width: 75%;
     padding: 20px;
     padding-bottom: 5px;
@@ -65,11 +65,16 @@ body {
     height: 20px;
     text-align: center;
     min-height: 50px;
+
+    padding-top: 10px;
 }
 
 .top {
     margin-bottom: 20px;
     text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    padding-bottom: 10px;
 }
 
 #filename {
@@ -85,6 +90,7 @@ body {
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 5px;
+    background-color: white;
 }
 
 #judul {
@@ -142,9 +148,11 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
     padding-left: 10px;
+    padding-top: 10px;
     padding-bottom: 20px;
     overflow: auto;
-    background-color: #8d8dff12;
+    background-color: #f0f0f0;
+    max-height:500px;
 }
 
 .CodeMirror {
@@ -289,7 +297,7 @@ code.hljs{
             <button id="run-all" onclick="runAll(this)" class="btn-run-all shadow">▶ Run All</button>
         </div>
 
-        <div id="content">
+        <div onclick="cekUnSave()" id="content">
 
             <div class="blok">
                 <button onclick="deleteBlok(this)" class="btn-delete shadow">x</button>
@@ -311,7 +319,7 @@ code.hljs{
     <button onclick="addBlok()" class="btn-add-blok shadow">+ Add</button>
 
     <div class="footer">
-        <p>jd8lab v1</p>
+        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1</a></p>
     </div>
 
     </div><!-- end container -->
@@ -321,7 +329,19 @@ code.hljs{
 
 
 <script>
-var variableTempJd8 = [];
+var jd8listen = null;
+var jd8api = {};
+Object.defineProperty(jd8api, 'jd8listen', {
+  set: function(wkwk) {
+    //alert('catch');
+    this._data = wkwk;
+    writeOutput(this.id, this._data);
+  },
+  get: function() {
+    return this._data;
+  }
+});
+
 function moveUp(w) {
     var elem = w.parentElement;
     var prevElem = elem.previousElementSibling;
@@ -381,7 +401,7 @@ function addBlok(judul ='', komen ='', code ='', output=''){
                 <button onclick="moveUp(this)" class="btn-arrow shadow">↑</button>
 
                 <input id="judul" type="text" placeholder="heading" value="${judul}"><br>
-                <textarea id="komen" oninput="resize(this)" placeholder="comment">${komen}</textarea><br>
+                <textarea id="komen" oninput="resize(this)" onclick="resize(this)" placeholder="comment">${komen}</textarea><br>
 
                 <textarea id="code" class="code" oninput="resize(this)">${code}</textarea><br>
                 <button id="run" onclick="evalJs(this)" class="btn-run shadow">▶</button><br>
@@ -393,11 +413,9 @@ function addBlok(judul ='', komen ='', code ='', output=''){
 }
 
 function evalJs(w){
-    window.variableTempJd8 = [];
     var elem = w.parentElement;
     var output = elem.querySelector('#output');
     var code  = parseJs(getCode(elem));
-    // console.log(code);
 
     var blok = document.querySelectorAll('.blok');
     var index = Array.prototype.indexOf.call(blok, w.parentNode);
@@ -409,55 +427,31 @@ function evalJs(w){
         list_isi.push(cm_list[cmTmp].getValue());
     }
 
-    // console.log(list_isi);
 
     var isi = list_isi.join("\n\n");
         isi = parseJs(isi);
         isi = parseConsoleToFalse(isi);
 
     try {
-        var evil = eval(isi+"\n\n"+code+"\n\n returnVariableTempJd8();");
-        // alert(isi+"\n\n"+code+"\n\n returnVariableTempJd8();");
-
-        // ktk 2 console.log, hanya dieksekusi yang awal
-        // var evil = new Function(`return ${isi} ${code}`)();
-
-        // if(typeof evil == 'object'){ // sudah dihandle function lain
-        //     evil = JSON.stringify(evil);
-        // }
-
-        if(code ==""){
-            evil = 'output';
-        }
-        output.innerHTML = `<code>${evil}</code>`;
-        hljs.highlightElement(output.querySelector('code'));
+        jd8api.id = index;
+        var evil = eval(isi+"\n\n"+code);
+        jd8api.jd8listen = [];  
     } catch (error) {
-        output.innerHTML = `<code>${error}</code>`;
-        hljs.highlightElement(output.querySelector('code'));
+            output.innerHTML = `<code>${error}</code>`;
+            hljs.highlightElement(output.querySelector('code'));
     }
 }
 
-function evalOnly(elem){ // todo -> belum guna
-    var output = elem.querySelector('#output');
-    var code = elem.querySelector('#code');
-    var cm = code.getAttribute('editor_id');
 
-    var isi = cm_list[cm].getValue();
-        isi = parseJs(isi);
 
-    try {
-        var evil = eval(isi);
-
-        if(typeof evil == 'object'){
-            evil = JSON.stringify(evil);
-        }
-        output.innerHTML = `<code>${evil}</code>`;
-        hljs.highlightElement(output.querySelector('code'));
-    } catch (error) {
-        output.innerHTML = `<code>${error}</code>`;
-        hljs.highlightElement(output.querySelector('code'));
-    }
+function writeOutput(id, data){
+    var blok = document.querySelectorAll('.blok');
+    var output = blok[id].querySelector('#output');
+    data = data.join("\n👉 ");
+    output.innerHTML = `<code class="hljs language-json">👉 ${data}</code>`;
+    hljs.highlightElement(output.querySelector('code'));
 }
+
 
 function initAllCode(){
     var list = document.querySelectorAll('.code');
@@ -493,24 +487,28 @@ function parseConsoleToFalse(w){
     // this function will store echo, var_dump, print_r to variable $temp_var
     var w = w.replace(/console.log\(/g, 'falseReturn(');
     var w = w.replace(/printConsole\(/g, 'falseReturn(');
+    var w = w.replace(/console.table\(/g, 'falseReturn(');
     return w;
 }
 
-function printConsole(w){
-    console.log(w);
-    return HandleReturn(w);
+function printConsole(w, format){
+    setTimeout(() => {
+        console.log(w);
+        HandleReturn(w, format);
+    }, 48);
 }
 
-function HandleReturn(w){
+function HandleReturn(w, format){
     if(typeof w == 'object'){
+        if(format == "json"){
+            w = JSON.stringify(w, null, 2);
+        }else{
             w = JSON.stringify(w);
+        }
     }
-    return window.variableTempJd8.push(w);
-}
 
-function returnVariableTempJd8(){
-    var out = window.variableTempJd8.join("\n👉 ");
-    return "👉 "+out;
+    console.log(jd8api.jd8listen);
+    jd8api.jd8listen = [...jd8api.jd8listen, w];
 }
 
 function falseReturn(){
@@ -576,6 +574,7 @@ function save(){
             }else if(xhr.responseText == "true"){
                 const date = new Date();
                 console.log(`~ 💾 Saved : ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`);
+                window.cekLeaveSite = "";
     
                 document.getElementsByClassName("top")[0].classList.add("success");
                 setTimeout(function(){ 
@@ -636,11 +635,18 @@ function renderToHtml(){
 }
 
 function runAll(){
-    if (confirm("mensimulasikan click run untuk setiap  blok code dengan konsekwensi akan terjadi perulangan") == true) {
+    if (confirm("mensimulasikan click run untuk setiap  blok code dengan konsekwensi akan terjadi perulangan. fitur ini masih memiliki masalah dengan akurasi. khususnya jika terdapat code yang bersifat async. bijaklah.") == true) {
         var blok = document.getElementsByClassName('blok');
         console.log('simulate click all run button');
-        for(var i=0;i<blok.length;i++){
-            blok[i].querySelector('#run').click();
+
+        for (let i=0; i<blok.length; i++) {
+            task(i);
+        }
+        
+        function task(i) {
+            setTimeout(function() {
+                blok[i].querySelector('#run').click();
+            }, 2000 * i);
         }
     }
 }
@@ -670,6 +676,9 @@ function hideNullHeadingComment(){
         if(heading == '' && comment == ''){
             btnShowHide.click();
         }
+
+        // numpang, untuk resize
+        blok[i].querySelector("#komen").click();
     }
 }
 
@@ -713,8 +722,6 @@ function print_jd8lab(w){
     var blok = document.getElementsByClassName('blok');
     if(blok.length > 0){
         for(var i=0;i<blok.length;i++){
-            console.log(blok.length);
-            console.log("hapus "+i);
             blok[i].remove();
         }
     }
@@ -725,6 +732,7 @@ function print_jd8lab(w){
         try {
             document.getElementById('title-project').value = pack[0][0];
             document.getElementById('description-project').value  = pack[0][1];
+            document.getElementById('description-project').click();
         
             for(var i=0;i<pack[1].length;i++){
                 addBlok(pack[1][i][0], pack[1][i][1], pack[1][i][2], pack[1][i][3]);
@@ -745,6 +753,26 @@ function print_jd8lab(w){
 
 }
 
+function cekUnSave(){
+	window.cekLeaveSite = "unsave";
+}
+
+var jd8Imported = [];
+function jd8ImportScript(url) {
+    if(jd8Imported.includes(url) == false){
+        jd8Imported.push(url);
+        var script = document.createElement('script');
+        script.src = url;
+        document.head.appendChild(script);
+    }
+}
+
+window.addEventListener('beforeunload', function (e) {
+    if (cekLeaveSite == "unsave") {
+        e.preventDefault();
+        e.returnValue = 'mau ke mana?';
+    }
+});
 
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('welcome to jd8lab v1');
