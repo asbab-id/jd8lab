@@ -1,31 +1,33 @@
-# jd8lab
+# 🏠 jd8lab
 | jd8lab | Asbab Project	|
 | ------------  | ------------ |
 |<img src="https://github.com/asbab-id/jd8lab/blob/main/jd8_system/jd8.jpg?raw=true" width="200" />|![f](https://avatars.githubusercontent.com/u/126409850?s=200&v=4)
 
 terinspirasi oleh jupyter notebook.  tools untuk mempresentasikan code secara blok demi blok. **code in document**.
 
-# Story
+# 💡 Story
 mulanya kami hanya ingin membuat code playground untuk membantu presentasi saat meeting. kebetulan kami juga memiliki sedikit masalah dalam pendokumentasian code. kemudian karena tidak semua anggota tim kami mengerti code dan semua anggota dianjurkan untuk mengetahui alur dari code, maka jalan tengah kami adalah membuat code menjadi mudah dibaca dengan memberi penjelasan  langkah demi langkah.
 
 maka inilah,  eksperimen **jd8lab**.  dibuat untuk bahagia dan bersenang-senang.
 
-# Install
+# 🌠 Install
 - Download : https://github.com/asbab-id/jd8lab/archive/refs/heads/main.zip
 - Download jd8lab.zip kemudan extract di webserver kalian.
 
-# Fitur
+> **kami mengingatkan, jika kalian akan menginstall jd8lab ke public, perhatikan setting modenya. dan jangan lupa mengganti password default.**
+
+# 🎉 Fitur
 - Create New Note
 - Create Blok (Heading, Comment, Code Editor, Output)
 - Save
 - Render Note to HTML (Experimental)
 
-# Mode
+# ⚙️ Mode
 - **Without Security**,  semua orang bisa *Create New Note, Save, Run PHP on server*.  sangat berbahaya jika dijalankan di Hosting. karena siapapun akan dapat merusak komputer anda.
 - **Login Mode**, ketika fitur *Create New Note, Save, Run PHP on server* dijalankan, jd8lab akan meminta password. (default password: **jd8lab**). Kalian dapat mengubah Password Defaultnya dalam bentuk **md5**.
 - **View Only**, siapapun tidak akan bisa menjalankan fitur *Create New Note, Save, Run PHP on server* meskipun memiliki password. mode ini paling aman jika kalian ingin merilis jd8lab ke publik.
 
-# Setting
+# 🔧 Setting
 location : **jd8lab-system/setting.php**
 ```php
 <?php
@@ -37,10 +39,8 @@ $view_only             = false; // user cant (Save), (Create New File), (evalPhp
 
 ?>
 ```
-# Versi
- - v1 (codename: **yakuza**) - *04/03/2023*
 
-# How jd8lab Work
+#  ⚗️ How jd8lab Work
 jd8lab sangat mudah dimengerti. adapun jika susah dimengerti, itu pasti karena kami menulisnya dengan sangat buruk.
 
 **Back-end**, hanya berisi route, beberapa algoritma, **api** untuk Create, Save dan Eval PHP.
@@ -57,7 +57,11 @@ jd8lab sangat mudah dimengerti. adapun jika susah dimengerti, itu pasti karena k
 - proses modifikasi code terdapat di function **parse***.
 - code yang dimodifikasi antara lain adalah untuk returnFalse, Store ouput ke Variable, dan add NewLine.
 
-# Kontribusi
+# 📂 Versi
+ - v1 (codename: **yakuza**) - *04/03/2023*
+
+
+# 🎀 Kontribusi
 kami menyadari bahwa code yang kami tulis dalam versi ini sangat buruk. yang dapat kalian lakukan untukk berkontribusi :
 - Melaporkan kepada kami dengan mengisi issues.
 - Membantu Menerjemahkan
@@ -68,7 +72,7 @@ kami menyadari bahwa code yang kami tulis dalam versi ini sangat buruk. yang dap
 - Membagikan pengalaman kalian saat menggunakan jd8lab.
 
 
-# Links
+# 🔗 Links
 - Asbab Project : https://asbab.id
 - Instagram : https://instagram.com/asbab.id
 - Facebook : https://facebook.com/cikupdev
