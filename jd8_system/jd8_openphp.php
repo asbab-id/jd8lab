@@ -537,7 +537,7 @@ function evalPhp(w){
         isi = parseEchoPhp(isi);
 
     const uri = encodeURIComponent(isi+code);
-    console.log(uri);
+    // console.log(uri);
 
     xhr.open('POST', url, true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -688,8 +688,6 @@ function print_jd8lab(w){
     var blok = document.getElementsByClassName('blok');
     if(blok.length > 0){
         for(var i=0;i<blok.length;i++){
-            console.log(blok.length);
-            console.log("hapus "+i);
             blok[i].remove();
         }
     }
