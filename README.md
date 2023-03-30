@@ -10,6 +10,9 @@ mulanya kami hanya ingin membuat code playground untuk membantu presentasi saat 
 
 maka inilah,  eksperimen **jd8lab**.  dibuat untuk bahagia dan bersenang-senang.
 
+# 🎹 Demo
+https://jd8lab.asbab.id/
+
 # 🌠 Install
 - Download : https://github.com/asbab-id/jd8lab/archive/refs/heads/main.zip
 - Download jd8lab.zip kemudan extract di webserver kalian.
