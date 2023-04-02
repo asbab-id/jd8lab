@@ -24,6 +24,7 @@ https://jd8lab.asbab.id/
 - Create Blok (Heading, Comment, Code Editor, Output)
 - Save
 - Render Note to HTML (Experimental)
+> **Untuk Management file .jd8 bisa melalui File Manager biasa. file .jd8 bisa dicopy dan disebarkan dengan mudah.**
 
 # ⚙️ Mode
 - **Without Security**,  semua orang bisa *Create New Note, Save, Run PHP on server*.  sangat berbahaya jika dijalankan di Hosting. karena siapapun akan dapat merusak komputer anda.
