@@ -234,7 +234,7 @@ function newfile(ext){
     xhr.onreadystatechange = function() {
     if(xhr.readyState === XMLHttpRequest.DONE) {
         if(xhr.status === 200){
-            if(xhr.responseText == "view_only_enabled"){
+            if(xhr.responseText == "⛔️ View Only Mode"){
                 alert("view only mode");
             }else if(xhr.responseText == "true"){
                 window.location.href = `?open=${filename}.${ext}.jd8`;
