@@ -43,6 +43,8 @@ $password_login        = "44d70a0c84908a036043c25d765c4da2"; // md5. default = j
 $disable_php           = false;  // true to disable php
 $view_only             = false; // user cant (Save), (Create New File), (evalPhp)
 
+$exclude_folder        = "private"; // hide folder from list assets
+
 ?>
 ```
 

@@ -7,10 +7,11 @@
 
 
 function printAllAsset(){
+    global $exclude_folder;
     $arr = glob("*");
     $str = '';
     for($i=0;$i<count($arr);$i++){
-        if(!strpos($arr[$i],".jd8")){
+        if(!strpos($arr[$i],".jd8") && ($arr[$i] != $exclude_folder)){
             $str .= "<a href='$arr[$i]' target='_blank'>$arr[$i]</a><br>";
         }
     }
