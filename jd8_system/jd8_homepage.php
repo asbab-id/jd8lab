@@ -182,7 +182,7 @@ h2{
     <div class="container">
 
         <div class="top">
-            <h1 style="text-shadow: 6px -2px 6px #0a0a0a82;">jd8lab v1</h1>
+            <h1 style="text-shadow: 6px -2px 6px #0a0a0a82;">jd8lab</h1>
         </div>
 
         <div id="content">
