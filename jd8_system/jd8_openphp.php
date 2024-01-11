@@ -316,7 +316,7 @@ code.hljs{
     <button onclick="addBlok()" class="btn-add-blok shadow">+ Add</button>
 
     <div class="footer">
-        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1</a></p>
+        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1.1 codename: yakuza.</a></p>
     </div>
 
     </div><!-- end container -->
@@ -731,7 +731,7 @@ window.addEventListener('beforeunload', function (e) {
 });
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('welcome to jd8lab v1');
+    console.log('welcome to jd8lab v1.1');
     // note, resize all textarea
     initAllCode();
     <?php echo "print_jd8lab($openFile);";?>

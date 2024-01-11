@@ -23,23 +23,20 @@ if(isset($_POST["codeSave"])){
 }elseif(isset($_POST["evalPhp"])){
     CekViewOnly();
 
-    // todo -> cek login
     if($login_setting == true){
         if(@$_SESSION["login"] == true){
-            echo eval($_POST["evalPhp"]."\nfunction returnFalse(){}");
+            echo RunEvaluatePHP($_POST["evalPhp"]."\nfunction returnFalse(){}");
         }else{
-            // header("Location: ?");
             echo "login_failed";
         }
     }else{
-        echo eval($_POST["evalPhp"]);
+        echo RunEvaluatePHP($_POST["evalPhp"]."\nfunction returnFalse(){}");
     }
     exit();
     
 }elseif(isset($_POST["login"])){
     CekViewOnly();
 
-    // echo "login";
     if(md5($_POST["login"]) == $password_login){
         echo "true";
         $_SESSION["login"] = true;
@@ -82,7 +79,6 @@ if(isset($_POST["codeSave"])){
                 echo "true";
             }
         }else{
-            // header("Location: ?");
             echo "false";
         }
     }else{
@@ -103,8 +99,21 @@ if(isset($_POST["codeSave"])){
 function CekViewOnly(){
     global $view_only;
     if($view_only == true){
-        echo "view_only_enabled";
+        echo "⛔️ View Only Mode";
         exit();
+    }
+}
+
+function RunEvaluatePHP($w){
+    global $disable_php;
+    if($disable_php == true){
+        echo "⛔️ PHP is enabled";
+        exit();
+    }else{
+        $tmp_file = tempnam(sys_get_temp_dir(), '');
+        file_put_contents("$tmp_file",'<?php '."$w");
+        include "$tmp_file";
+        unlink($tmp_file);
     }
 }
 ?>

@@ -211,7 +211,7 @@ h2{
         </div><!-- end content -->
 
     <div class="footer">
-        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1</a></p>
+        <p><a href="https://github.com/asbab-id/jd8lab" target="_blank" style="text-decoration: none;color: #7f6f6f;">jd8lab v1.1 codename: yakuza.</a></p>
     </div>
 
     </div><!-- end container -->
@@ -290,7 +290,7 @@ function login_jd8lab(callback, arrParam) {
 }
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    console.log('welcome to jd8lab v1');
+    console.log('welcome to jd8lab v1.1');
     // note, resize all textarea
 });
 </script>

@@ -29,6 +29,7 @@ https://jd8lab.asbab.id/
 # ⚙️ Mode
 - **Without Security**,  semua orang bisa *Create New Note, Save, Run PHP on server*.  sangat berbahaya jika dijalankan di Hosting. karena siapapun akan dapat merusak komputer anda.
 - **Login Mode**, ketika fitur *Create New Note, Save, Run PHP on server* dijalankan, jd8lab akan meminta password. (default password: **jd8lab**). Kalian dapat mengubah Password Defaultnya dalam bentuk **md5**.
+- **Disable PHP**, menonaktifkan PHP untuk keamanan server.
 - **View Only**, siapapun tidak akan bisa menjalankan fitur *Create New Note, Save, Run PHP on server* meskipun memiliki password. mode ini paling aman jika kalian ingin merilis jd8lab ke publik.
 
 # 🔧 Setting
@@ -39,6 +40,7 @@ location : **jd8lab-system/setting.php**
 $login_setting         = true; // change true or false to setting secure jd8lab
 $password_login        = "44d70a0c84908a036043c25d765c4da2"; // md5. default = jd8lab
 
+$disable_php           = false;  // true to disable php
 $view_only             = false; // user cant (Save), (Create New File), (evalPhp)
 
 ?>
@@ -63,6 +65,7 @@ jd8lab sangat mudah dimengerti. adapun jika susah dimengerti, itu pasti karena k
 
 # 📂 Versi
  - v1 (codename: **yakuza**) - *04/03/2023*
+ - v1.1 - *11/01/2024*
 
 
 # 🎀 Kontribusi
