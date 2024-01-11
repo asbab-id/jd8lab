@@ -434,6 +434,8 @@ function parseEchoPhp(w){
     var w = w.replace(/echo/g, '$false_echo[] = ');
     var w = w.replace(/var_dump/g, 'returnFalse');
     var w = w.replace(/print_r/g, 'returnFalse');
+    var w = w.replace(/system\(/g, 'returnFalse(');
+    var w = w.replace(/passthru\(/g, 'returnFalse(');
     return w;
 }
 
